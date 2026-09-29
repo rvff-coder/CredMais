@@ -1,10 +1,10 @@
 import 'server-only'
 
+import { MENSAGEM_TAMANHO_COMPROVANTE, TAMANHO_MAXIMO_COMPROVANTE } from '@/lib/comprovante'
 import { mensagemDeErro } from '@/lib/erros'
 import type { ClienteSupabase } from '@/lib/supabase/server'
 
 export const BUCKET_COMPROVANTES = 'comprovantes'
-export const TAMANHO_MAXIMO_COMPROVANTE = 5 * 1024 * 1024
 export const TIPOS_COMPROVANTE: Record<string, string> = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
@@ -14,7 +14,7 @@ export const TIPOS_COMPROVANTE: Record<string, string> = {
 
 export function validarComprovante(arquivo: File): string | null {
   if (!TIPOS_COMPROVANTE[arquivo.type]) return 'O comprovante deve ser uma imagem (JPG, PNG, WEBP) ou PDF.'
-  if (arquivo.size > TAMANHO_MAXIMO_COMPROVANTE) return 'O comprovante deve ter no máximo 5 MB.'
+  if (arquivo.size > TAMANHO_MAXIMO_COMPROVANTE) return MENSAGEM_TAMANHO_COMPROVANTE
   if (arquivo.size === 0) return 'O arquivo do comprovante está vazio.'
   return null
 }

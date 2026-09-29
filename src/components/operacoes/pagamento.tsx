@@ -8,6 +8,7 @@ import { Modal } from '@/components/modal'
 import { SeloParcela } from '@/components/status'
 import { Botao, Dado, classesBotao, cx } from '@/components/ui'
 import { anexarComprovanteAcao, receberParcela } from '@/acoes/pagamentos'
+import { MENSAGEM_TAMANHO_COMPROVANTE, TAMANHO_MAXIMO_COMPROVANTE } from '@/lib/comprovante'
 import { formatarMoeda, paraCentavos, type Centavos } from '@/lib/financeiro/dinheiro'
 import { formatarData, type DataISO } from '@/lib/financeiro/datas'
 import type { StatusParcela } from '@/lib/tipos'
@@ -150,7 +151,7 @@ function CampoArquivo({
   return (
     <div>
       <p className="mb-1.5 flex items-baseline justify-between text-xs font-medium text-tinta-2">
-        {rotulo} <span className="text-[11px] font-normal text-tinta-4">opcional · JPG, PNG, WEBP ou PDF até 5 MB</span>
+        {rotulo} <span className="text-[11px] font-normal text-tinta-4">opcional · JPG, PNG, WEBP ou PDF até 4 MB</span>
       </p>
       {arquivo ? (
         <div className="flex items-center gap-3 rounded-2xl border border-borda bg-painel px-4 py-3">
@@ -188,8 +189,8 @@ function CampoArquivo({
         tabIndex={-1}
         onChange={(e) => {
           const f = e.target.files?.[0] ?? null
-          if (f && f.size > 5 * 1024 * 1024) {
-            setErro('O comprovante deve ter no máximo 5 MB.')
+          if (f && f.size > TAMANHO_MAXIMO_COMPROVANTE) {
+            setErro(MENSAGEM_TAMANHO_COMPROVANTE)
             e.target.value = ''
             return
           }
