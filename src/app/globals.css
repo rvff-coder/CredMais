@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/*
+ * Linguagem visual: fundo quase preto, painéis em grafite, bordas de 7% de
+ * branco, azul vibrante só para ação e links. O app é escuro por padrão e por
+ * design, então não há tema claro.
+ */
+@theme {
+  --color-fundo: #0a0a0b;
+  --color-lateral: #0d0d0f;
+  --color-painel: #161618;
+  --color-painel-2: #1c1c1f;
+  --color-painel-3: #242428;
+  --color-painel-4: #2d2d32;
+  --color-borda: rgb(255 255 255 / 0.07);
+  --color-borda-forte: rgb(255 255 255 / 0.12);
+
+  --color-tinta: #f4f4f5;
+  --color-tinta-2: #a1a1aa;
+  --color-tinta-3: #71717a;
+  --color-tinta-4: #52525b;
+
+  --color-azul: #2f7bf5;
+  --color-azul-claro: #5b9bff;
+  --color-azul-escuro: #1f63d6;
+  --color-azul-fundo: rgb(47 123 245 / 0.14);
+
+  --color-verde: #34d399;
+  --color-verde-fundo: rgb(52 211 153 / 0.12);
+  --color-vermelho: #f87171;
+  --color-vermelho-fundo: rgb(248 113 113 / 0.12);
+  --color-ambar: #fbbf24;
+  --color-ambar-fundo: rgb(251 191 36 / 0.12);
+  --color-violeta: #a78bfa;
+  --color-violeta-fundo: rgb(167 139 250 / 0.14);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-cartao: 1.25rem;
+  --radius-painel: 1.75rem;
+
+  --animate-entrar: entrar 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-subir: subir 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-deslizar: deslizar 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  @keyframes entrar {
+    from { opacity: 0; transform: scale(0.97) translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes subir {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes deslizar {
+    from { transform: translateX(-100%); }
+    to { transform: none; }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-fundo);
+  color: var(--color-tinta);
+}
+
+body {
+  font-feature-settings: "cv11", "ss01";
+}
+
+/* Valores monetários com algarismos de largura fixa: colunas alinham. */
+.numeros {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: rgb(47 123 245 / 0.35);
+}
+
+/* Barra de rolagem discreta, como no restante da interface. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.12) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-azul-claro);
+  outline-offset: 2px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.6);
+  backdrop-filter: blur(4px);
+}
+
+dialog[open] {
+  animation: entrar 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
