@@ -211,9 +211,10 @@ export function EstadoVazio({
   )
 }
 
+/** No celular, a ação (abas de período, links) desce para baixo do título em vez de espremê-lo. */
 export function TituloSecao({ children, acao, className }: { children: ReactNode; acao?: ReactNode; className?: string }) {
   return (
-    <div className={cx('flex items-center justify-between gap-3', className)}>
+    <div className={cx('flex flex-wrap items-center justify-between gap-x-3 gap-y-2', className)}>
       <h2 className="text-[15px] font-semibold tracking-tight text-tinta">{children}</h2>
       {acao}
     </div>

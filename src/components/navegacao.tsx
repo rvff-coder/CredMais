@@ -176,7 +176,7 @@ export function Abas({
             scroll={false}
             aria-current={ativo ? 'true' : undefined}
             className={cx(
-              'rounded-[10px] px-2.5 py-1 text-xs font-medium transition-colors',
+              'rounded-[10px] px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors',
               ativo ? 'bg-painel-4 text-tinta shadow-sm' : 'text-tinta-3 hover:text-tinta',
             )}
           >

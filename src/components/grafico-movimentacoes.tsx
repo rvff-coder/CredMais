@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { formatarMoeda, paraCentavos } from '@/lib/financeiro/dinheiro'
 import { formatarData, formatarDataCurta, nomeMesCurto } from '@/lib/financeiro/datas'
@@ -39,8 +39,19 @@ function compacto(reais: number) {
 export function GraficoMovimentacoes({ pontos, agrupar }: { pontos: Ponto[]; agrupar: 'dia' | 'mes' }) {
   const [foco, setFoco] = useState<number | null>(null)
 
-  const largura = 720
-  const altura = 220
+  // O viewBox acompanha a largura real: escalar um desenho de 720px para a
+  // tela do celular deixava os rótulos dos eixos com ~4px.
+  const caixa = useRef<HTMLDivElement>(null)
+  const [largura, setLargura] = useState(720)
+  useEffect(() => {
+    const el = caixa.current
+    if (!el) return
+    const obs = new ResizeObserver(([e]) => setLargura(Math.max(260, Math.round(e.contentRect.width))))
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  const altura = largura < 480 ? 180 : 220
   const margem = { topo: 12, direita: 8, base: 26, esquerda: 52 }
   const areaL = largura - margem.esquerda - margem.direita
   const areaA = altura - margem.topo - margem.base
@@ -55,8 +66,9 @@ export function GraficoMovimentacoes({ pontos, agrupar }: { pontos: Ponto[]; agr
   const y = (v: number) => margem.topo + areaA - (v / maximo) * areaA
   const marcas = [0, 0.25, 0.5, 0.75, 1].map((f) => f * maximo)
 
-  // Rótulos do eixo X sem sobreposição: no máximo ~8.
-  const cadaQuantos = Math.max(1, Math.ceil(pontos.length / 8))
+  // Rótulos do eixo X sem sobreposição: um a cada ~64px, no máximo 8.
+  const maxRotulos = Math.max(2, Math.min(8, Math.floor(areaL / 64)))
+  const cadaQuantos = Math.max(1, Math.ceil(pontos.length / maxRotulos))
 
   const focado = foco !== null ? pontos[foco] : null
 
@@ -71,7 +83,7 @@ export function GraficoMovimentacoes({ pontos, agrupar }: { pontos: Ponto[]; agr
         </span>
       </div>
 
-      <div className="relative">
+      <div ref={caixa} className="relative">
         <svg
           viewBox={`0 0 ${largura} ${altura}`}
           className="h-auto w-full overflow-visible"

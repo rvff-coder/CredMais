@@ -59,7 +59,8 @@ export async function Cabecalho({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 space-y-1">
           {antesDoTitulo}
-          <h1 className="truncate text-2xl font-semibold tracking-tight sm:text-[28px]">{titulo}</h1>
+          {/* No celular o título quebra linha (nomes longos de cliente); a partir do sm, corta com reticências. */}
+          <h1 className="text-2xl font-semibold tracking-tight break-words sm:truncate sm:text-[28px]">{titulo}</h1>
           {descricao && <p className="text-sm text-tinta-3">{descricao}</p>}
         </div>
         <div className="flex shrink-0 items-center gap-2">

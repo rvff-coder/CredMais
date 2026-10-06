@@ -58,7 +58,7 @@ export default async function PaginaCliente({ params }: PageProps<'/clientes/[id
         titulo={
           <span className="flex items-center gap-3">
             <Avatar nome={cliente.nome} tamanho="lg" className="hidden sm:inline-grid" />
-            <span className="truncate">{cliente.nome}</span>
+            <span className="min-w-0 sm:truncate">{cliente.nome}</span>
           </span>
         }
         descricao={

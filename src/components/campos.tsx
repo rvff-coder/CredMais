@@ -89,7 +89,7 @@ export function CampoDocumento({
         autoComplete="off"
         autoCapitalize="characters"
         aria-invalid={erro ? true : undefined}
-        className={cx(CLASSE_CAMPO, 'numeros uppercase')}
+        className={cx(CLASSE_CAMPO, 'numeros uppercase placeholder:normal-case')}
       />
       {erro && <span className="text-xs text-vermelho">{erro}</span>}
     </label>

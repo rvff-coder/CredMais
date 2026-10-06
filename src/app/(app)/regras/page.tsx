@@ -36,7 +36,27 @@ export default async function PaginaRegras() {
               className="py-10"
             />
           ) : (
-            <div className="mt-3 overflow-x-auto">
+            <>
+            {/* Celular: uma linha por alteração, sem rolagem lateral. */}
+            <ul className="mt-3 divide-y divide-borda sm:hidden">
+              {historico.map((h) => (
+                <li key={h.id} className="py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <Pilula>{NOME_MODALIDADE[h.tipo_regra]}</Pilula>
+                    <span className="numeros text-sm">
+                      <span className="text-tinta-3">{formatarPercentual(h.valor_anterior)}</span>
+                      <span className="px-1.5 text-tinta-4">→</span>
+                      <strong className="font-semibold">{formatarPercentual(h.valor_novo)}</strong>
+                    </span>
+                  </div>
+                  <p className="numeros mt-1.5 text-xs text-tinta-3">
+                    {formatarData(diaDoInstante(h.created_at))} {formatarHora(h.created_at)}
+                    {h.usuario_nome && ` · ${h.usuario_nome}`}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 hidden overflow-x-auto sm:block">
               <table className="w-full min-w-[32rem] text-sm">
                 <thead>
                   <tr className="border-b border-borda text-left text-[11px] font-medium tracking-wide text-tinta-4 uppercase">
@@ -64,6 +84,7 @@ export default async function PaginaRegras() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </Cartao>
       </div>

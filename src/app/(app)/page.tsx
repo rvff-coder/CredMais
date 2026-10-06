@@ -81,8 +81,8 @@ export default async function PaginaDashboard({ searchParams }: PageProps<'/'>) 
           />
         </section>
 
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
+          <div className="min-w-0 space-y-6">
             <Cartao className="p-5">
               <TituloSecao
                 acao={
@@ -173,7 +173,30 @@ export default async function PaginaDashboard({ searchParams }: PageProps<'/'>) 
                   className="py-10"
                 />
               ) : (
-                <div className="mt-3 overflow-x-auto">
+                <>
+                {/* Celular: lista em vez de tabela, sem rolagem lateral. */}
+                <ul className="mt-3 divide-y divide-borda sm:hidden">
+                  {atrasadas.itens.map((p) => (
+                    <li key={p.id}>
+                      <Link href={`/clientes/${p.cliente_id}`} className="flex items-center gap-3 py-3">
+                        <Avatar nome={p.cliente_nome} tamanho="sm" />
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-medium">{p.cliente_nome}</span>
+                          <span className="numeros block text-xs text-tinta-3">
+                            Parcela {p.numero_parcela}/{p.quantidade_parcelas} · venceu {formatarData(p.data_vencimento)}
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-right">
+                          <span className="numeros block text-sm font-semibold">{formatarMoeda(paraCentavos(p.valor))}</span>
+                          <span className="numeros block text-xs font-medium text-vermelho">
+                            {p.dias_atraso} {p.dias_atraso === 1 ? 'dia' : 'dias'}
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-3 hidden overflow-x-auto sm:block">
                   <table className="w-full min-w-[34rem] text-sm">
                     <thead>
                       <tr className="text-left text-[11px] font-medium tracking-wide text-tinta-4 uppercase">
@@ -215,6 +238,7 @@ export default async function PaginaDashboard({ searchParams }: PageProps<'/'>) 
                     </tbody>
                   </table>
                 </div>
+                </>
               )}
             </Cartao>
           </div>
@@ -270,15 +294,19 @@ function ResumoPeriodo({ serie }: { serie: { entradas: number; saidas: number }[
   const saidas = serie.reduce((s, p) => s + paraCentavos(p.saidas), 0)
   const saldo = entradas - saidas
   return (
-    <dl className="mt-4 grid grid-cols-3 gap-3">
+    // No celular, três colunas cortavam os valores ("R$ 15.0…"): vira uma linha por item.
+    <dl className="mt-4 grid gap-2 sm:grid-cols-3 sm:gap-3">
       {[
         { rotulo: 'Entradas', valor: formatarMoeda(entradas) },
         { rotulo: 'Saídas', valor: formatarMoeda(saidas) },
         { rotulo: 'Resultado', valor: `${saldo < 0 ? '- ' : ''}${formatarMoeda(Math.abs(saldo))}` },
       ].map((d) => (
-        <div key={d.rotulo} className="rounded-xl border border-borda bg-painel-2 px-3 py-2.5">
+        <div
+          key={d.rotulo}
+          className="flex items-baseline justify-between gap-3 rounded-xl border border-borda bg-painel-2 px-3 py-2.5 sm:block"
+        >
           <dt className="text-[11px] text-tinta-3">{d.rotulo}</dt>
-          <dd className="numeros mt-0.5 truncate text-sm font-semibold sm:text-base">{d.valor}</dd>
+          <dd className="numeros truncate text-sm font-semibold sm:mt-0.5 sm:text-base">{d.valor}</dd>
         </div>
       ))}
     </dl>
