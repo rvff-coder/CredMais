@@ -4,7 +4,7 @@ import { alterarStatusCliente, atualizarCliente, criarCliente, listarEventosClie
 import { alterarStatusSocio, atualizarSocio, criarSocio } from '@/lib/servicos/socios'
 import { sessaoDaAcao } from '@/lib/servicos/sessao'
 import type { Evento, Resultado, StatusCadastro } from '@/lib/tipos'
-import { cnpjValido, normalizarCnpj } from '@/lib/validacao/cnpj'
+import { documentoValido, normalizarDocumento } from '@/lib/validacao/documento'
 
 import { SESSAO_EXPIRADA, atualizarTelas, ehUuid, texto } from './comum'
 
@@ -14,13 +14,13 @@ export async function salvarCliente(dados: FormData): Promise<Resultado<{ id: st
 
   const id = dados.get('id')
   const nome = texto(dados.get('nome'), 160)
-  const cnpj = normalizarCnpj(texto(dados.get('cnpj'), 30))
+  const cnpj = normalizarDocumento(texto(dados.get('cnpj'), 30))
   const contato = texto(dados.get('contato'), 160)
   const observacoes = texto(dados.get('observacoes'), 2000)
 
   const campos: Record<string, string> = {}
   if (!nome) campos.nome = 'Informe o nome do cliente.'
-  if (!cnpjValido(cnpj)) campos.cnpj = 'CNPJ inválido. Confira os números.'
+  if (!documentoValido(cnpj)) campos.cnpj = 'CPF ou CNPJ inválido. Confira os números.'
   if (Object.keys(campos).length) return { ok: false, erro: 'Confira os campos destacados.', campos }
 
   const registro = { nome, cnpj, contato, observacoes }

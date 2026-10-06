@@ -145,7 +145,7 @@ function ConteudoLateral({ dados }: { dados: DadosCasca }) {
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder="Buscar cliente"
-          aria-label="Buscar cliente por nome, CNPJ ou contato"
+          aria-label="Buscar cliente por nome, CPF, CNPJ ou contato"
           className="h-9 w-full rounded-xl border border-borda bg-painel-2 pr-3 pl-9 text-sm placeholder:text-tinta-4
                      focus:border-azul focus:outline-none"
         />

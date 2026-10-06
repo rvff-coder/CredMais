@@ -44,11 +44,11 @@ export function mensagemDeErro(erro: ErroBanco, generica: string): string {
       return MENSAGENS.PARCELA_JA_PAGA
     }
     if (/clientes_cnpj_key/.test(erro.message ?? '')) {
-      return 'Já existe um cliente cadastrado com este CNPJ.'
+      return 'Já existe um cliente cadastrado com este CPF ou CNPJ.'
     }
   }
   if (erro.code === '23514' && /cnpj/.test(erro.message ?? '')) {
-    return 'CNPJ inválido.'
+    return 'CPF ou CNPJ inválido.'
   }
   if (erro.code === 'PGRST301' || erro.code === '42501') {
     return 'Você não tem permissão para esta operação. Entre novamente.'

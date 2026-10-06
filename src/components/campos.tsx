@@ -4,7 +4,7 @@ import { useState, type ComponentProps } from 'react'
 
 import { CLASSE_CAMPO, Rotulo, cx } from '@/components/ui'
 import { lerValorDigitado, mascararValor, type Centavos } from '@/lib/financeiro/dinheiro'
-import { cnpjValido, formatarCnpj, normalizarCnpj } from '@/lib/validacao/cnpj'
+import { documentoValido, formatarDocumento, tipoDocumento } from '@/lib/validacao/documento'
 
 /**
  * Campo de valor em reais. Formata enquanto digita (os dígitos entram como
@@ -57,8 +57,11 @@ export function CampoMoeda({
   )
 }
 
-/** CNPJ com máscara e validação ao sair do campo. Aceita o alfanumérico. */
-export function CampoCnpj({
+/**
+ * CPF ou CNPJ no mesmo campo, com máscara e validação ao sair do campo.
+ * Até 11 dígitos é CPF; passou disso (ou tem letra) é CNPJ, inclusive o alfanumérico.
+ */
+export function CampoDocumento({
   valorInicial = '',
   erroServidor,
   ...props
@@ -66,22 +69,23 @@ export function CampoCnpj({
   valorInicial?: string
   erroServidor?: string
 }) {
-  const [texto, setTexto] = useState(formatarCnpj(valorInicial))
+  const [texto, setTexto] = useState(formatarDocumento(valorInicial))
   const [tocado, setTocado] = useState(false)
 
-  const completo = normalizarCnpj(texto).length === 14
-  const invalido = tocado && texto !== '' && (!completo || !cnpjValido(texto))
-  const erro = invalido ? 'CNPJ inválido. Confira os números.' : erroServidor
+  const tipo = tipoDocumento(texto)
+  const valido = tipo !== null && documentoValido(texto)
+  const invalido = tocado && texto !== '' && !valido
+  const erro = invalido ? `${tipo ?? 'CPF ou CNPJ'} inválido. Confira os números.` : erroServidor
 
   return (
     <label className="flex flex-col gap-1.5">
-      <Rotulo dica={completo && cnpjValido(texto) ? '✓ válido' : undefined}>CNPJ</Rotulo>
+      <Rotulo dica={valido ? `✓ ${tipo} válido` : undefined}>CPF ou CNPJ</Rotulo>
       <input
         {...props}
         value={texto}
-        onChange={(e) => setTexto(formatarCnpj(e.target.value))}
+        onChange={(e) => setTexto(formatarDocumento(e.target.value))}
         onBlur={() => setTocado(true)}
-        placeholder="00.000.000/0000-00"
+        placeholder="CPF ou CNPJ, só os números"
         autoComplete="off"
         autoCapitalize="characters"
         aria-invalid={erro ? true : undefined}

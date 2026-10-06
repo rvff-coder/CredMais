@@ -118,6 +118,14 @@ try {
     await db.query('rollback to savepoint c')
   })
 
+  await caso('cliente com CPF é aceito; CPF inválido é recusado', async () => {
+    await db.query('savepoint c')
+    await db.query(`insert into clientes (nome, cnpj) values ('Pessoa Física', '52998224725')`)
+    await db.query('rollback to savepoint c')
+    await assert.rejects(db.query(`insert into clientes (nome, cnpj) values ('X', '52998224724')`))
+    await db.query('rollback to savepoint c')
+  })
+
   await caso('cadastro de cliente gera evento CLIENTE_CRIADO', async () => {
     const r = await um(`select count(*)::int as n from eventos where cliente_id = $1 and tipo_evento = 'CLIENTE_CRIADO'`, [cliente])
     assert.equal(r.n, 1)

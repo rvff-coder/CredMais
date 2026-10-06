@@ -18,7 +18,7 @@ import { calcularSaldo } from '@/lib/servicos/carteira'
 import { listarEventosCliente, obterCliente } from '@/lib/servicos/clientes'
 import { listarEmprestimosDoCliente, proximasParcelasDoCliente } from '@/lib/servicos/emprestimos'
 import { exigirSessao } from '@/lib/servicos/sessao'
-import { formatarCnpj } from '@/lib/validacao/cnpj'
+import { formatarDocumento } from '@/lib/validacao/documento'
 
 export async function generateMetadata({ params }: PageProps<'/clientes/[id]'>): Promise<Metadata> {
   const { id } = await params
@@ -63,7 +63,7 @@ export default async function PaginaCliente({ params }: PageProps<'/clientes/[id
         }
         descricao={
           <span className="flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:pl-[68px]">
-            <span className="numeros">{formatarCnpj(cliente.cnpj)}</span>
+            <span className="numeros">{formatarDocumento(cliente.cnpj)}</span>
             {cliente.contato && (
               <span className="inline-flex items-center gap-1">
                 <Phone className="size-3.5" aria-hidden /> {cliente.contato}

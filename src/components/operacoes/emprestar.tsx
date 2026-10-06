@@ -25,7 +25,7 @@ import {
   formatarPercentual,
   type Modalidade,
 } from '@/lib/financeiro/emprestimo'
-import { formatarCnpj } from '@/lib/validacao/cnpj'
+import { formatarDocumento } from '@/lib/validacao/documento'
 
 type Props = {
   clienteId?: string
@@ -239,7 +239,7 @@ function ModalEmprestar({
                 <option value="">Selecione o cliente…</option>
                 {dados.clientes.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.nome} — {formatarCnpj(c.cnpj)}
+                    {c.nome} — {formatarDocumento(c.cnpj)}
                   </option>
                 ))}
               </Selecao>

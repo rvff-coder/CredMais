@@ -18,6 +18,7 @@ import {
 import { ehDomingo, diaDaSemana, hojeBR, somarDias } from '../src/lib/financeiro/datas.ts'
 import { formatarMoeda, lerValorDigitado, paraCentavos, paraReais } from '../src/lib/financeiro/dinheiro.ts'
 import { cnpjValido, formatarCnpj } from '../src/lib/validacao/cnpj.ts'
+import { cpfValido, documentoValido, formatarDocumento, tipoDocumento } from '../src/lib/validacao/documento.ts'
 
 test('diário do prompt: R$ 1.000 a 35% = 24 x R$ 56,25', () => {
   const c = calcularEmprestimo(100000, 'DIARIO', 35, '2026-04-06')
@@ -130,4 +131,24 @@ test('CNPJ numérico e alfanumérico', () => {
   assert.ok(cnpjValido('12.ABC.345/01DE-35'))
   assert.equal(formatarCnpj('11222333000181'), '11.222.333/0001-81')
   assert.equal(formatarCnpj('12abc34501de35'), '12.ABC.345/01DE-35')
+})
+
+test('documento do cliente: CPF ou CNPJ', () => {
+  assert.ok(cpfValido('529.982.247-25'))
+  assert.ok(cpfValido('52998224725'))
+  assert.ok(!cpfValido('529.982.247-24'))
+  assert.ok(!cpfValido('11111111111'))
+  assert.ok(documentoValido('529.982.247-25'))
+  assert.ok(documentoValido('11.222.333/0001-81'))
+  assert.ok(documentoValido('12.ABC.345/01DE-35'))
+  assert.ok(!documentoValido('123456789'))
+  assert.equal(tipoDocumento('52998224725'), 'CPF')
+  assert.equal(tipoDocumento('11222333000181'), 'CNPJ')
+  assert.equal(tipoDocumento('1234'), null)
+  // A máscara acompanha a digitação: CPF até 11 dígitos, depois vira CNPJ.
+  assert.equal(formatarDocumento('5299822'), '529.982.2')
+  assert.equal(formatarDocumento('52998224725'), '529.982.247-25')
+  assert.equal(formatarDocumento('112223330001'), '11.222.333/0001')
+  assert.equal(formatarDocumento('11222333000181'), '11.222.333/0001-81')
+  assert.equal(formatarDocumento('12abc'), '12.ABC')
 })

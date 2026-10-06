@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Pencil, Plus } from 'lucide-react'
 
 import { useAvisos } from '@/components/avisos'
-import { CampoCnpj } from '@/components/campos'
+import { CampoDocumento } from '@/components/campos'
 import { Modal } from '@/components/modal'
 import { AreaTexto, Botao, Campo, classesBotao } from '@/components/ui'
 import { mudarStatusCliente, mudarStatusSocio, salvarCliente, salvarSocio } from '@/acoes/cadastros'
@@ -58,10 +58,10 @@ function ModalCliente({
           required
           maxLength={160}
           autoFocus
-          placeholder="Razão social ou nome fantasia"
+          placeholder="Nome completo ou razão social"
           erro={campos.nome}
         />
-        <CampoCnpj name="cnpj" valorInicial={cliente?.cnpj} required erroServidor={campos.cnpj} />
+        <CampoDocumento name="cnpj"valorInicial={cliente?.cnpj} required erroServidor={campos.cnpj} />
         <Campo
           rotulo="Contato"
           name="contato"

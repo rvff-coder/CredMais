@@ -17,7 +17,7 @@ import { calcularSaldo } from '@/lib/servicos/carteira'
 import { obterConfiguracoes } from '@/lib/servicos/configuracoes'
 import { exigirSessao } from '@/lib/servicos/sessao'
 import type { ClienteResumo, SituacaoCliente, StatusCadastro } from '@/lib/tipos'
-import { formatarCnpj } from '@/lib/validacao/cnpj'
+import { formatarDocumento } from '@/lib/validacao/documento'
 
 export const metadata: Metadata = { title: 'Clientes' }
 
@@ -75,7 +75,7 @@ export default async function PaginaClientes({ searchParams }: PageProps<'/clien
         />
 
         <div className="flex flex-col gap-3 px-4 pt-2 sm:px-6 lg:px-8">
-          <BarraBusca placeholder="Buscar por nome, CNPJ ou contato" className="max-w-md" />
+          <BarraBusca placeholder="Buscar por nome, CPF, CNPJ ou contato" className="max-w-md" />
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             <Filtros
               nome="situacao"
@@ -171,7 +171,7 @@ export default async function PaginaClientes({ searchParams }: PageProps<'/clien
                   <Avatar nome={selecionado.nome} tamanho="lg" />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-base font-semibold">{selecionado.nome}</p>
-                    <p className="numeros truncate text-xs text-tinta-3">{formatarCnpj(selecionado.cnpj)}</p>
+                    <p className="numeros truncate text-xs text-tinta-3">{formatarDocumento(selecionado.cnpj)}</p>
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
                       <SeloSituacaoCliente situacao={selecionado.situacao} />
                       {selecionado.status === 'INATIVO' && <SeloCadastro status="INATIVO" />}
@@ -234,7 +234,7 @@ function LinhaCliente({ cliente: c, href, ativo }: { cliente: ClienteResumo; hre
         <Avatar nome={c.nome} />
         <span className="min-w-0">
           <span className="block truncate text-sm font-medium">{c.nome}</span>
-          <span className="numeros block truncate text-xs text-tinta-3">{formatarCnpj(c.cnpj)}</span>
+          <span className="numeros block truncate text-xs text-tinta-3">{formatarDocumento(c.cnpj)}</span>
         </span>
       </span>
 

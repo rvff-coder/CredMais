@@ -54,7 +54,7 @@ confere que os dois dão o mesmo resultado.
 ```
 supabase/migrations/   esquema, funções financeiras, RLS, bucket de comprovantes
 src/lib/financeiro/    dinheiro (centavos), datas, cálculo do empréstimo
-src/lib/validacao/     CNPJ (numérico e alfanumérico)
+src/lib/validacao/     CPF e CNPJ (numérico e alfanumérico) do cliente
 src/lib/servicos/      acesso ao banco, por domínio
 src/acoes/             server actions: autenticam, validam e chamam os serviços
 src/components/        interface (ui, casca, operações, timeline, gráfico)
